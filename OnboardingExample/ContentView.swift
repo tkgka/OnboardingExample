@@ -8,17 +8,39 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var currnetPage: OnboardingPage = .first
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            currnetPage.view(currentPage: $currnetPage)
+                .padding(.top, 50)
+                .padding(.bottom, 24)
+        }.background {
+            GeometryReader { proxy in
+                BackgroundGradientView(offsetY: proxy.size.height + 120)
+            }
         }
-        .padding()
     }
 }
 
-#Preview {
-    ContentView()
+
+enum OnboardingPage: Int, CaseIterable {
+    
+    case first
+    case second
+    case third
+    
+    
+    @ViewBuilder
+    func view(currentPage: Binding<OnboardingPage>) -> some View {
+        switch self {
+        case .first:
+            FirstPageView(currnetPage: currentPage)
+        case .second:
+            SecondPageView(currnetPage: currentPage)
+        case .third:
+            ThirdPageView(currnetPage: currentPage)
+        }
+    }
 }
